@@ -2,11 +2,12 @@ import { useQuiz } from "../Context/Context";
 
 function NextButton() {
 
-const {dispatch,answer,index,ques} = useQuiz()
+const {dispatch,answer,index,questionLength} = useQuiz()
+console.log(questionLength )
 
  if(answer === null) return null;
 
- const isLastQuestion = index === ques-1
+ const isLastQuestion = index === questionLength-1
  function nextClick(){
   if(isLastQuestion){
     dispatch({type: "finishScreen"})
@@ -14,6 +15,10 @@ const {dispatch,answer,index,ques} = useQuiz()
     dispatch({type:"newQuestion"})
   }
  }
+ 
+    // setTimeout(() => {
+    //     dispatch({type:"newQuestion",payload:index+1})
+    //   }, 1500);
  
   return (
     <button className="btn btn-ui" onClick={nextClick}>
@@ -26,6 +31,3 @@ export default NextButton
 
 
 
-    // setTimeout(() => {
-    //     dispatch({type:"newQuestion",payload:index+1})
-    //   }, 1500);

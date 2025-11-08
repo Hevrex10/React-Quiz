@@ -1,42 +1,31 @@
-import { useEffect } from "react";
 import { useQuiz } from "../Context/Context";
 
 function RestartQuiz() {
+  const { dispatch } = useQuiz();
 
-  const {dispatch} = useQuiz()
+  async function restart() {
+    dispatch({ type: "restart" });
 
-function restart(){
-   dispatch({type:"restart"}) 
-
-    
-    const controller = new AbortController();
-    const signal = controller.signal;
-
-    async function fetchQuestion() {
-      try {
-        const res = await fetch("/data/questions.json", { signal });
-        if (!res.ok) throw new Error("Error: " + res.status);
-        const data = await res.json();
-        dispatch({ type: "dataRecieved", payload: data });
-      } catch (err) {
-        if (err.name !== "AbortError") dispatch({ type: "dataFailed" });
-      }
+    try {
+      const res = await fetch("/data/questions.json");
+      if (!res.ok) throw new Error("Error: " + res.status);
+      const data = await res.json();
+      dispatch({ type: "dataRecieved", payload: data });
+    } catch (err) {
+      dispatch({ type: "dataFailed" });
     }
-    fetchQuestion();
-    return () => {
-      controller.abort();
-    };
- 
-
-}
+  }
 
   return (
-    <div>
-   <button className="btn btn-ui" onClick={restart}>
-      Restart Quiz
-    </button>
+    <div className="mt-4 flex justify-center">
+      <button
+        className="btn btn-ui px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors duration-300"
+        onClick={restart}
+      >
+        Restart Quiz
+      </button>
     </div>
-  )
+  );
 }
 
-export default RestartQuiz
+export default RestartQuiz;

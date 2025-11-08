@@ -38,8 +38,6 @@ function reducer(state, action) {
       case "newAnswer":
         const question = state.questions[state.index]
         const isCorrect = action.payload === question.correctOption
-      
-       
         return{
           ...state,
           answer: action.payload,
@@ -96,6 +94,8 @@ const [state, dispatch] = useReducer(reducer, initialState);
     const questionLength= questions.length
     
   const totalPoints = questions.reduce((sum, ques) => sum + ques.points, 0);
+  console.log(totalPoints)
+   
 
  
 
@@ -107,6 +107,7 @@ const [state, dispatch] = useReducer(reducer, initialState);
         if (!res.ok) throw new Error("Error: " + res.status);
         const data = await res.json();
         dispatch({ type: "dataRecieved", payload: data });
+        console.log(data)
       } catch (err) {
         if (err.name !== "AbortError") dispatch({ type: "dataFailed" });
       }
@@ -114,7 +115,6 @@ const [state, dispatch] = useReducer(reducer, initialState);
     fetchQuestion();
 
   },[]);
-  console.log(point)
    
   return ( 
   <questionContext.Provider value={{questions,status,index,answer,point,highscore,secondsRemaining,dispatch,questionLength,totalPoints}}>{children}</questionContext.Provider>
